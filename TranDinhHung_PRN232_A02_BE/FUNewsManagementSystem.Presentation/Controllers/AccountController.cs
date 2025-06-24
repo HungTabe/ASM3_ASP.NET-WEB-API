@@ -73,5 +73,21 @@ namespace FUNewsManagementSystem.Presentation.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        [Authorize(Roles = "0")]
+        [HttpDelete("delete-account-by-admin/{id}")]
+        public async Task<IActionResult> Delete(short id)
+        {
+            try
+            {
+                var success = await _accountService.DeleteAsync(id);
+                if (!success) return BadRequest("Cannot delete account because it is linked to news articles.");
+                return Ok("Delete user acccount data successfully");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
     }
 }
