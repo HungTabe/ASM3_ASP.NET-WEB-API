@@ -2,9 +2,12 @@
 using FUNewsManagementSystem.Data.Entities;
 using FUNewsManagementSystem.Data.IRepositories;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,5 +51,26 @@ namespace FUNewsManagementSystem.Business.Services
         public async Task CreateAsync(SystemAccount account) => await _accountRepository.CreateAsync(account);
         public async Task UpdateAsync(SystemAccount account) => await _accountRepository.UpdateAsync(account);
         public async Task<bool> DeleteAsync(short id) => await _accountRepository.DeleteAsync(id);
+
+        public async Task<string> GenerateJwtToken(SystemAccount account)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, account.AccountEmail),
+                new Claim(ClaimTypes.Role, account.AccountRole.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }

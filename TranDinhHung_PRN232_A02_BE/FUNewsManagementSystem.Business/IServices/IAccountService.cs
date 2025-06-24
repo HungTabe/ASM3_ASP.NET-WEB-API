@@ -15,5 +15,7 @@ namespace FUNewsManagementSystem.Business.IServices
         Task CreateAsync(SystemAccount account);
         Task UpdateAsync(SystemAccount account);
         Task<bool> DeleteAsync(short id);
+        Task<string> GenerateJwtToken(SystemAccount account);
+
     }
 }
