@@ -1,4 +1,4 @@
-﻿namespace FUNewsManagementSystem.Presentation.DTOs
+﻿namespace FUNewsManagementSystem.Data.DTOs
 {
     public class LoginModelRequest
     {

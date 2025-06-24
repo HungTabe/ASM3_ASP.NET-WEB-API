@@ -25,12 +25,17 @@ namespace FUNewsManagementSystem.Data.Repositories
             return await _context.SystemAccounts.FindAsync(id);
         }
 
-        public async Task CreateAsync(SystemAccount account)
+        public async Task<SystemAccount> GetByNameOrEmailAsync(string name, string email)
+        {
+            return await _context.SystemAccounts.FirstOrDefaultAsync(r => r.AccountName == name || r.AccountEmail == email);
+        }
+
+        public async Task ICreateAsync(SystemAccount account)
         {
             await CreateAsync(account);
         }
 
-        public async Task UpdateAsync(SystemAccount account)
+        public async Task IUpdateAsync(SystemAccount account)
         {
             await UpdateAsync(account);
         }

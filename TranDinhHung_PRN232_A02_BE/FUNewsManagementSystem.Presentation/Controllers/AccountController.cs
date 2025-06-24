@@ -1,6 +1,6 @@
 ﻿using FUNewsManagementSystem.Business.IServices;
+using FUNewsManagementSystem.Data.DTOs;
 using FUNewsManagementSystem.Data.Entities;
-using FUNewsManagementSystem.Presentation.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,10 +44,15 @@ namespace FUNewsManagementSystem.Presentation.Controllers
 
         [Authorize(Roles = "0")]
         [HttpPost("create-account-by-admin")]
-        public async Task<IActionResult> Create([FromBody] SystemAccount account)
+        public async Task<IActionResult> Create([FromBody] SystemAccountRequest account)
         {
+            try { 
             await _accountService.CreateAsync(account);
-            return CreatedAtAction(nameof(GetAll), new { id = account.AccountId }, account);
+            return CreatedAtAction(nameof(GetAll), account);
+            } catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }
