@@ -54,5 +54,24 @@ namespace FUNewsManagementSystem.Presentation.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        [Authorize(Roles = "0")]
+        [HttpPut("update-by-id/{id}")]
+        public async Task<IActionResult> Update(short id, [FromBody] SystemAccountRequest accountDto)
+        {
+            try
+            {
+                var existingAccount = await _accountService.GetByIdAsync(id);
+                if (existingAccount == null) return NotFound();
+
+                accountDto.AccountId = id; // Đảm bảo ID không bị thay đổi
+                await _accountService.UpdateAsync(accountDto);
+                return Ok("Update user acccount data successfully");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
     }
 }
