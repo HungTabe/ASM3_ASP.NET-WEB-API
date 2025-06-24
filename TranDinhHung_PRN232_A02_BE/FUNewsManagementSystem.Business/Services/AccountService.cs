@@ -1,4 +1,5 @@
 ﻿using FUNewsManagementSystem.Business.IServices;
+using FUNewsManagementSystem.Data.DTOs;
 using FUNewsManagementSystem.Data.Entities;
 using FUNewsManagementSystem.Data.IRepositories;
 using Microsoft.Extensions.Configuration;
@@ -48,8 +49,36 @@ namespace FUNewsManagementSystem.Business.Services
 
         public async Task<IEnumerable<SystemAccount>> GetAllAsync() => await _accountRepository.GetAllAsync();
         public async Task<SystemAccount> GetByIdAsync(short id) => await _accountRepository.GetByIdAsync(id);
-        public async Task CreateAsync(SystemAccount account) => await _accountRepository.CreateAsync(account);
-        public async Task UpdateAsync(SystemAccount account) => await _accountRepository.UpdateAsync(account);
+        public async Task CreateAsync(SystemAccountRequest accountDto)
+        {
+            // Check SystemAccount Exist ?
+            var user = await _accountRepository.GetByNameOrEmailAsync(accountDto.AccountName, accountDto.AccountEmail);
+            if (user != null)
+            {
+                throw new Exception("UserName or UseEmail has existed in database");
+            }
+
+            var account = new SystemAccount
+            {
+                AccountName = accountDto.AccountName,
+                AccountEmail = accountDto.AccountEmail,
+                AccountRole = accountDto.AccountRole,
+                AccountPassword = accountDto.AccountPassword
+            };
+            await _accountRepository.ICreateAsync(account);
+        }
+
+        public async Task UpdateAsync(SystemAccountRequest accountDto)
+        {
+            var account = new SystemAccount
+            {
+                AccountName = accountDto.AccountName,
+                AccountEmail = accountDto.AccountEmail,
+                AccountRole = accountDto.AccountRole,
+                AccountPassword = accountDto.AccountPassword
+            };
+            await _accountRepository.IUpdateAsync(account);
+        }
         public async Task<bool> DeleteAsync(short id) => await _accountRepository.DeleteAsync(id);
 
         public async Task<string> GenerateJwtToken(SystemAccount account)

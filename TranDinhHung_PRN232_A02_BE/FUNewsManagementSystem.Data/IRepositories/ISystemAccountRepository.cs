@@ -11,8 +11,9 @@ namespace FUNewsManagementSystem.Data.IRepositories
     {
         Task<List<SystemAccount>> GetAllAsync();
         Task<SystemAccount> GetByIdAsync(short id);
-        Task CreateAsync(SystemAccount account);
-        Task UpdateAsync(SystemAccount account);
+        Task<SystemAccount> GetByNameOrEmailAsync(string name, string email);
+        Task ICreateAsync(SystemAccount account);
+        Task IUpdateAsync(SystemAccount account);
         Task<bool> DeleteAsync(short id);
         Task<bool> CanDeleteAsync(short id);
     }
