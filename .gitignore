@@ -1,0 +1,90 @@
+# ASP.NET Core
+bin/
+obj/
+*.csproj.user
+*.pubxml
+*.pubxml.user
+*.suo
+*.user
+*.sln.docstates
+
+# Visual Studio
+.vscode/
+*.vs/
+*.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.bak
+*.cache
+*.log
+*.tlog
+*.dbmdl
+*.publishsettings
+*.pubxml
+*.publishproj
+
+# NuGet Packages
+*.nupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Entity Framework
+*.mdf
+*.ldf
+*.sdf
+
+# Environment-specific settings
+appsettings.Development.json
+appsettings.Production.json
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rchive/
+[Pp]ublish/
+[Bb]uild/
+*.pdb
+*.xml
+*.manifest
+*.application
+*.msi
+*.msm
+*.msp
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache
+*.log
+*.swp
+*.swo
+*~
+
+# IDE-specific
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# Miscellaneous
+Thumbs.db
+.DS_Store
+*.lock.json
+
+# Sensitive information
+*.pem
+*.key
+*.cer
+*.crt
+*.pfx
+*.keystore
+*.jks
+*.secret
+*.config
+*.env
