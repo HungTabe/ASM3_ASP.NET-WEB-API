@@ -17,12 +17,16 @@ namespace FUNewsManagementSystem.Data.Repositories
 
         public async Task<List<NewsArticle>> GetAllAsync()
         {
-            return await _context.NewsArticles.ToListAsync();
+            return await _context.NewsArticles
+                .Include(n => n.Tags)
+                .ToListAsync();
         }
 
         public async Task<NewsArticle> GetByIdAsync(string id)
         {
-            return await _context.NewsArticles.FindAsync(id);
+            return await _context.NewsArticles
+                .Include(n => n.Tags)
+                .FirstOrDefaultAsync(n => n.NewsArticleId == id);
         }
 
         public async Task CreateAsync(NewsArticle article)
@@ -40,6 +44,36 @@ namespace FUNewsManagementSystem.Data.Repositories
             var article = await GetByIdAsync(id);
             if (article == null) return false;
             return await RemoveAsync(article);
+        }
+
+        public async Task AddTagsAsync(string newsArticleId, List<int> tagIds)
+        {
+            var article = await _context.NewsArticles
+                .Include(n => n.Tags)
+                .FirstOrDefaultAsync(n => n.NewsArticleId == newsArticleId);
+            if (article == null) return;
+
+            var tags = await _context.Tags
+                .Where(t => tagIds.Contains(t.TagId))
+                .ToListAsync();
+
+            foreach (var tag in tags)
+            {
+                article.Tags.Add(tag);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveTagsAsync(string newsArticleId)
+        {
+            var article = await _context.NewsArticles
+                .Include(n => n.Tags)
+                .FirstOrDefaultAsync(n => n.NewsArticleId == newsArticleId);
+            if (article == null) return;
+
+            article.Tags.Clear();
+            await _context.SaveChangesAsync();
         }
     }
 }

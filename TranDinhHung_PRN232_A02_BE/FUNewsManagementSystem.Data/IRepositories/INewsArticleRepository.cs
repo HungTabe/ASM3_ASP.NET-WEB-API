@@ -14,5 +14,7 @@ namespace FUNewsManagementSystem.Data.IRepositories
         Task CreateAsync(NewsArticle article);
         Task UpdateAsync(NewsArticle article);
         Task<bool> DeleteAsync(string id);
+        Task AddTagsAsync(string newsArticleId, List<int> tagIds);
+        Task RemoveTagsAsync(string newsArticleId);
     }
 }
